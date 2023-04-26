@@ -71,7 +71,7 @@ export const handler = async (event) => {
 
             // Add the message to the Google Sheets spreadsheet
             const values = [
-                [new Date(), server[1], oldCategories[0], trimmedMessages]
+                [new Date(), server[1], oldCategories[0], "'" + trimmedMessages]
             ];
             await sheets.spreadsheets.values.append({
                 spreadsheetId: SPREADSHEET_ID,
