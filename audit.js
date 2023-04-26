@@ -49,9 +49,9 @@ export const handler = async (event) => {
             let start = 0;
             let end = messages.length;
             let mid = Math.floor((start + end) / 2);
-            // let trimmed = transcript;
+            let tries = 0;
 
-            while (start < end) {
+            while (start < end && tries < 10) {
                 const transcript = messages.slice(0, mid).map((message) => message.user + ": " + message.message).join('\n');
                 flaggedCategories = await checkFlag(transcript);
                 if (flaggedCategories) {
@@ -63,6 +63,7 @@ export const handler = async (event) => {
                 if (end - start <= 5)
                     break;
                 mid = Math.floor((start + end) / 2);
+                tries++;
             }
             const trimmedMessages = messages.slice(start, end).map((message) => message.user + ": " + message.message).join('\n');
             const hook = generateWebhook(oldCategories[0], server[1], trimmedMessages, users);
@@ -179,15 +180,15 @@ function generateWebhook(category, server, messages, users) {
             {
                 "author": {
                     "name": `${titleCased} Content - ${server}`,
-                    "description": `\`\`\`${messages}\`\`\``,
-                    "color": color,
-                    "fields": [
-                        {
-                            "name": "Users",
-                            "value": users,
-                        }
-                    ]
-                }
+                },
+                "description": `\`\`\`${messages}\`\`\``,
+                "color": color,
+                "fields": [
+                    {
+                        "name": "Users",
+                        "value": users,
+                    }
+                ]
             }
         ]
     }
