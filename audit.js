@@ -11,7 +11,8 @@ const servers = [
     ['http://edgegamers.gameme.com/chat/csgo4', 'AWP'],
     ['http://edgegamers.gameme.com/chat/csgo5', 'Surf'],
     ['http://edgegamers.gameme.com/chat/csgo6', 'BHop'],
-    ['http://edgegamers.gameme.com/chat/css', 'CSS']
+    ['http://edgegamers.gameme.com/chat/css', 'CSS'],
+    ['http://edgegamers.gameme.com/chat/tf', 'TF2']
 ];
 
 const ai_moderation = "https://api.openai.com/v1/moderations";
@@ -71,7 +72,7 @@ export const handler = async (event) => {
 
             // Add the message to the Google Sheets spreadsheet
             const values = [
-                [new Date(), server[1], oldCategories[0], "'" + trimmedMessages]
+                [`= EPOCHTODATE(${new Date().getTime() / 1000})`, server[1], oldCategories[0], "'" + trimmedMessages]
             ];
             await sheets.spreadsheets.values.append({
                 spreadsheetId: SPREADSHEET_ID,
@@ -194,4 +195,4 @@ function generateWebhook(category, server, messages, users) {
     }
 }
 
-await handler();
+// await handler();
